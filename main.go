@@ -19,18 +19,29 @@ func main() {
 	forke := new(props.Fork)
 	forks := make([]*props.Fork, total)
 	for i := 0; i < total; i++ {
+		// Conando los Forks los cuales no tienen muchas diferencias .-.
 		forks[i] = forke.Clone()
 	}
 
-	continuar := 1
+	// plantilla de Philosopher
+	phil := &props.Philosopher{
+		Id:    0,
+		LFork: new(props.Fork),
+		RFork: new(props.Fork),
+	}
 
+	continuar := 1
 	// secuencia para preguntar si repetir la ejecucion del programa
 	for continuar == 1 {
 		// Se crea el filosofo y se le establecen dos tenedores
 		philosophers := make([]*props.Philosopher, total)
 		for i := 0; i < total; i++ {
-			philosophers[i] = &props.Philosopher{
-				Id: i, LFork: forks[i], RFork: forks[(i+1)%total]}
+			// Clonando a phil
+			philosophers[i] = phil.Clone()
+			// Los philosophers necesitan valores diferentes
+			philosophers[i].Id = i
+			philosophers[i].LFork = forks[i]
+			philosophers[i].RFork = forks[(i+1)%total]
 			eatWgroup.Add(1)
 			go func(i int) {
 				defer eatWgroup.Done()
